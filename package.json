@@ -15,7 +15,8 @@
     "prepare": "husky",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "start": "node main.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
