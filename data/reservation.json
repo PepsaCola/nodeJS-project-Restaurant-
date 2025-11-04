@@ -1,8 +1,11 @@
-[
-  {
-    "_id": "R001",
-    "customerName": "Олена Павлюк",
-    "date": "2025-11-10T18:30:00Z",
-    "tableNumber": 3
-  }
-]
+{
+  "reservations": [
+    {
+      "_id": "8iK9gqAE88x0Hg7qH-4fD",
+      "customerName": "Микола",
+      "date": "2025-11-06T19:00:00.000Z",
+      "tableNumber": 5,
+      "createdAt": "2025-11-04T20:27:37.404Z"
+    }
+  ]
+}

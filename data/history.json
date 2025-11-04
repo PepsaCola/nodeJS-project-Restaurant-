@@ -2,7 +2,7 @@
   {
     "_id": "1",
     "customerName": "Петро Іванов",
-    "totalPrice": 450.0,
+    "totalPrice": 450,
     "date": "2025-11-04T12:00:00Z",
     "items": [
       {
@@ -10,5 +10,24 @@
         "quantity": 1
       }
     ]
+  },
+  {
+    "_id": "c6YSBxyOxLnCIx0ysz_1T",
+    "customerName": "Іван Петренко",
+    "totalPrice": 425.5,
+    "status": "completed",
+    "employee_id": "E101",
+    "items": [
+      {
+        "menu_id": "M001",
+        "quantity": 2
+      },
+      {
+        "menu_id": "M002",
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2025-11-04T20:22:00.137Z",
+    "date": "2025-11-04T20:23:15.626Z"
   }
 ]
