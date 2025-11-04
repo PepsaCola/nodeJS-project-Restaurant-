@@ -1,0 +1,14 @@
+[
+  {
+    "_id": "1",
+    "customerName": "Петро Іванов",
+    "totalPrice": 450.0,
+    "date": "2025-11-04T12:00:00Z",
+    "items": [
+      {
+        "menu_id": "M003",
+        "quantity": 1
+      }
+    ]
+  }
+]

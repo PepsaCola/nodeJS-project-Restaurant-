@@ -24,5 +24,9 @@
       "prettier --write"
     ],
     "*": "prettier --write --ignore-unknown"
+  },
+  "type": "module",
+  "dependencies": {
+    "express": "^5.1.0"
   }
 }
