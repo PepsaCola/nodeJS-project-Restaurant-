@@ -1,23 +1,11 @@
-import fs from 'fs/promises';
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const menuPath = path.join(__dirname, '../data/menu.json');
-
-const readJSON = async (filePath) => {
-  const data = await fs.readFile(filePath, 'utf8');
-  return JSON.parse(data);
-};
+import MenuService from '../services/menu.js';
 
 const getMenu = async (req, res) => {
   try {
-    const menu = await readJSON(menuPath);
+    const menu = await MenuService.getMenu();
     res.json(menu);
   } catch (error) {
-    res.status(500).json({ error: 'Не вдалося зчитати меню' });
+    res.status(500).json({ error: error.message });
   }
 };
 
