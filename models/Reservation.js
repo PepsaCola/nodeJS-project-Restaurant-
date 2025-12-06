@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 import { nanoid } from 'nanoid';
 
-const reservationSchema = new mongoose.Schema({
+const reservationSchema = new mongoose.Schema(
+  {
     _id: {
       type: String,
       default: () => nanoid(),

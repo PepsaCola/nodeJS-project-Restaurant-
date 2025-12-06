@@ -42,7 +42,7 @@ describe('Order API & Service Integration Tests', () => {
       price: price,
       category: 'Main',
       image: 'img.jpg',
-      ingredients: ['ingredient1']
+      ingredients: ['ingredient1'],
     });
   };
 
@@ -52,12 +52,10 @@ describe('Order API & Service Integration Tests', () => {
 
       const newOrderData = {
         customerName: 'Integration Tester',
-        items: [{ menu_id: dish._id.toString(), quantity: 2 }]
+        items: [{ menu_id: dish._id.toString(), quantity: 2 }],
       };
 
-      const res = await request(app)
-        .post('/api/orders')
-        .send(newOrderData);
+      const res = await request(app).post('/api/orders').send(newOrderData);
 
       expect(res.statusCode).toBe(201);
       expect(res.body.customerName).toBe('Integration Tester');
@@ -69,7 +67,7 @@ describe('Order API & Service Integration Tests', () => {
     it('should return 404 if ordering a non-existent dish', async () => {
       const badOrder = {
         customerName: 'Fail Tester',
-        items: [{ menu_id: 'non_existent_id', quantity: 1 }]
+        items: [{ menu_id: 'non_existent_id', quantity: 1 }],
       };
 
       const res = await request(app).post('/api/orders').send(badOrder);
@@ -87,7 +85,7 @@ describe('Order API & Service Integration Tests', () => {
         totalPrice: 100,
         status: 'active',
         employee_id: 'E1',
-        items: [{ menu_id: dish._id, quantity: 2 }]
+        items: [{ menu_id: dish._id, quantity: 2 }],
       });
 
       // Create one COMPLETED order
@@ -97,7 +95,7 @@ describe('Order API & Service Integration Tests', () => {
         totalPrice: 50,
         status: 'completed',
         employee_id: 'E1',
-        items: [{ menu_id: dish._id, quantity: 1 }]
+        items: [{ menu_id: dish._id, quantity: 1 }],
       });
 
       const res = await request(app).get('/api/orders');
@@ -110,21 +108,28 @@ describe('Order API & Service Integration Tests', () => {
 
   describe('Statistics & History', () => {
     it('should correctly calculate popular dishes based on quantity', async () => {
-
       await createDish('d_pizza', 'Pizza', 100);
       await createDish('d_burger', 'Burger', 80);
 
       await Order.create({
-        _id: 'o1', customerName: 'U1', totalPrice: 500, status: 'completed', employee_id: 'E1',
-        items: [{ menu_id: 'd_pizza', quantity: 5 }]
+        _id: 'o1',
+        customerName: 'U1',
+        totalPrice: 500,
+        status: 'completed',
+        employee_id: 'E1',
+        items: [{ menu_id: 'd_pizza', quantity: 5 }],
       });
 
       await Order.create({
-        _id: 'o2', customerName: 'U2', totalPrice: 1000, status: 'completed', employee_id: 'E1',
+        _id: 'o2',
+        customerName: 'U2',
+        totalPrice: 1000,
+        status: 'completed',
+        employee_id: 'E1',
         items: [
           { menu_id: 'd_pizza', quantity: 2 },
-          { menu_id: 'd_burger', quantity: 10 }
-        ]
+          { menu_id: 'd_burger', quantity: 10 },
+        ],
       });
 
       const res = await request(app).get('/api/history/popular-dishes');
@@ -145,7 +150,7 @@ describe('Order API & Service Integration Tests', () => {
         totalPrice: 10,
         status: 'active',
         employee_id: 'E1',
-        items: []
+        items: [],
       });
 
       const res = await request(app).delete('/api/orders/ord_delete_active');
@@ -160,7 +165,7 @@ describe('Order API & Service Integration Tests', () => {
         totalPrice: 10,
         status: 'completed',
         employee_id: 'E1',
-        items: []
+        items: [],
       });
 
       const res = await request(app).delete('/api/orders/ord_delete_done');

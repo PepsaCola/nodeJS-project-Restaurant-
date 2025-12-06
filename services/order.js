@@ -6,9 +6,7 @@ const defaultEmployee = 'E101';
 
 const getAllHistory = async () => {
   try {
-    return await Order.find()
-      .populate('items.menu_id', 'dishName price')
-      .sort({ createdAt: -1 });
+    return await Order.find().populate('items.menu_id', 'dishName price').sort({ createdAt: -1 });
   } catch (error) {
     console.error('Помилка у сервісі getAllHistory:', error);
     throw new Error('Не вдалося отримати історію замовлень');
@@ -120,9 +118,7 @@ const deleteOrder = async (orderId) => {
   });
 
   if (!deletedOrder) {
-    const err = new Error(
-      'Замовлення не знайдено або не має статусу "completed".'
-    );
+    const err = new Error('Замовлення не знайдено або не має статусу "completed".');
     err.statusCode = 404;
     throw err;
   }
