@@ -141,3 +141,4 @@ vite.config.ts.timestamp-*
 .idea
 
 .stryker-tmp
+/.stryker-tmp/
