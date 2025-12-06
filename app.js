@@ -18,7 +18,7 @@ app.use((_, res) => {
   res.status(404).send('Route not found');
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   const { status = 500, message = 'Server error' } = err;
   res.status(status).json({ message });
 });

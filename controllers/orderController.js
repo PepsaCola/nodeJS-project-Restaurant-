@@ -23,7 +23,7 @@ const getAllActiveOrders = async (req, res) => {
     const orders = await OrderService.getAllActiveOrders();
     res.json(orders);
   } catch (error) {
-    res.status(500).json({ error: 'Не вдалося зчитати список замовлень.' });
+    res.status(500).json({ message: 'Не вдалося зчитати список замовлень.', error: error });
   }
 };
 
