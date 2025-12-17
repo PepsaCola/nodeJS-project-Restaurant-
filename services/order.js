@@ -1,8 +1,23 @@
 import { nanoid } from 'nanoid';
 import Order from '../models/Order.js';
 import Dish from '../models/Dish.js';
+import { OrderProcessor } from 'order-processor';
 
 const defaultEmployee = 'E101';
+
+class MongoosePriceProvider {
+  async getPrice(id) {
+    try {
+      const dish = await Dish.findById(id);
+      return dish ? dish.price : null;
+    } catch (error) {
+      return null;
+    }
+  }
+}
+
+const priceProvider = new MongoosePriceProvider();
+const processor = new OrderProcessor(priceProvider);
 
 const getAllHistory = async () => {
   try {
@@ -67,29 +82,27 @@ const createOrder = async (orderBody) => {
     err.statusCode = 400;
     throw err;
   }
-  const menuIds = items.map((item) => item.menu_id);
-  const menuItems = await Dish.find({ _id: { $in: menuIds } });
-  const menuMap = new Map(menuItems.map((dish) => [dish._id, dish]));
 
-  let totalPrice = 0;
-  const orderItems = [];
-  for (const item of items) {
-    const menuItem = menuMap.get(item.menu_id);
-    if (!menuItem) {
-      const err = new Error(`Страва з ID ${item.menu_id} не знайдена.`);
-      err.statusCode = 404;
-      throw err;
-    }
-    totalPrice += menuItem.price * item.quantity;
-    orderItems.push({ menu_id: item.menu_id, quantity: item.quantity });
+  const libItems = items.map((item) => ({
+    menuId: item.menu_id,
+    quantity: item.quantity,
+  }));
+
+  const result = await processor.processOrder(libItems);
+
+  if (result.errors.length > 0) {
+    const err = new Error(result.errors.join(', '));
+    err.statusCode = 400;
+    throw err;
   }
+
   const newOrder = {
     _id: nanoid(),
     customerName,
-    totalPrice: parseFloat(totalPrice.toFixed(2)),
+    totalPrice: parseFloat(result.totalPrice.toFixed(2)),
     status: 'active',
     employee_id: defaultEmployee,
-    items: orderItems,
+    items: items,
   };
 
   return Order.create(newOrder);
