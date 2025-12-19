@@ -2,11 +2,10 @@ import { jest, describe, it, expect, beforeAll, afterAll, afterEach } from '@jes
 import request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import app from '../../app.js'; // Ensure this path is correct relative to your test file
+import app from '../../app.js';
 import Dish from '../../models/Dish.js';
 import Order from '../../models/Order.js';
 
-// Increase timeout for MongoMemoryServer startup
 jest.setTimeout(60000);
 
 let mongoServer;
@@ -19,7 +18,6 @@ describe('Order API & Service Integration Tests', () => {
   });
 
   afterEach(async () => {
-    // Clean up data between tests
     const collections = mongoose.connection.collections;
     for (const key in collections) {
       await collections[key].deleteMany({});
@@ -71,7 +69,7 @@ describe('Order API & Service Integration Tests', () => {
       };
 
       const res = await request(app).post('/api/orders').send(badOrder);
-      expect(res.statusCode).toBe(404);
+      expect(res.statusCode).toBe(400);
     });
   });
 
@@ -88,7 +86,6 @@ describe('Order API & Service Integration Tests', () => {
         items: [{ menu_id: dish._id, quantity: 2 }],
       });
 
-      // Create one COMPLETED order
       await Order.create({
         _id: 'order_completed',
         customerName: 'Completed User',

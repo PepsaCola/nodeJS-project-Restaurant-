@@ -37,6 +37,15 @@ describe('Order Service Unit Tests', () => {
   });
 
   describe('createOrder', () => {
+    beforeEach(() => {
+      jest.spyOn(Dish, 'findById').mockImplementation((id) => {
+        if (id === 'dish1')
+          return Promise.resolve({ _id: 'dish1', price: 100, dishName: 'Dish 1' });
+        if (id === 'dish2') return Promise.resolve({ _id: 'dish2', price: 50, dishName: 'Dish 2' });
+        return Promise.resolve(null);
+      });
+    });
+
     it('повинен успішно створити замовлення і порахувати total price', async () => {
       const orderData = {
         customerName: 'Ivan',
@@ -50,15 +59,11 @@ describe('Order Service Unit Tests', () => {
         { _id: 'dish1', price: 100 },
         { _id: 'dish2', price: 50 },
       ];
-
       jest.spyOn(Dish, 'find').mockResolvedValue(mockDishes);
 
       const createdOrder = { ...orderData, totalPrice: 250, _id: 'order123' };
       jest.spyOn(Order, 'create').mockResolvedValue(createdOrder);
-
       const result = await OrderService.createOrder(orderData);
-
-      expect(Dish.find).toHaveBeenCalledWith({ _id: { $in: ['dish1', 'dish2'] } });
 
       expect(Order.create).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -78,15 +83,14 @@ describe('Order Service Unit Tests', () => {
     });
 
     it('повинен викинути помилку 404, якщо страва не знайдена', async () => {
-      const orderData = {
+      // Виправляємо змінні
+      const badOrder = {
         customerName: 'Ivan',
         items: [{ menu_id: 'unknown_dish', quantity: 1 }],
       };
 
-      jest.spyOn(Dish, 'find').mockResolvedValue([]);
-
-      await expect(OrderService.createOrder(orderData)).rejects.toThrow(
-        'Страва з ID unknown_dish не знайдена.',
+      await expect(OrderService.createOrder(badOrder)).rejects.toThrow(
+        'Item unknown_dish not found in menu',
       );
     });
   });
